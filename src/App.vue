@@ -22,23 +22,13 @@ export default {
 
   mounted() {
     onscan.attachTo(document, {
-      reactToPaste: true,
       onScan: (barcode) => {
           this.barcodeValue = barcode;
           this.textboxFillType = 'Textbox fill using barcode sccaner.'
       },
 
-      onKeyProcess: (keyCharecter, event) => {
-        if (event.ctrlKey && keyCharecter == 'v') {
-          return;
-        }
-
+      onKeyProcess: () => {
         this.textboxFillType = 'Textbox fill using keyboard.'
-      },
-
-      onPaste: (barcodeValue) => {
-        this.barcodeValue = barcodeValue;
-        this.textboxFillType = 'Textbox fill using copy/paste.'
       }
     });
   }
