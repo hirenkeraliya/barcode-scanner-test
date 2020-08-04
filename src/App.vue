@@ -1,17 +1,46 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <input type="text" v-model="barcodeValue">
+
+    <h1>
+      {{ textboxFillType }}
+    </h1>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import onscan from 'onscan.js'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      barcodeValue: '',
+      textboxFillType: ''
+    }
+  },
+
+  mounted() {
+    onscan.attachTo(document, {
+      reactToPaste: true,
+      onScan: (barcode) => {
+          this.barcodeValue = barcode;
+          this.textboxFillType = 'Textbox fill using barcode sccaner.'
+      },
+
+      onKeyProcess: (keyCharecter, event) => {
+        if (event.ctrlKey && keyCharecter == 'v') {
+          return;
+        }
+
+        this.textboxFillType = 'Textbox fill using keyboard.'
+      },
+
+      onPaste: (barcodeValue) => {
+        this.barcodeValue = barcodeValue;
+        this.textboxFillType = 'Textbox fill using copy/paste.'
+      }
+    });
   }
 }
 </script>
